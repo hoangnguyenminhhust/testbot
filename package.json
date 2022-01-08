@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@elastic/elasticsearch": "^7.16.0",
+    "@elastic/elasticsearch": "7.8.0",
     "@meanie/mongoose-upsert-many": "^2.2.0",
     "amqplib": "^0.8.0",
     "crypto": "^1.0.1",

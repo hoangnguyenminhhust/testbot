@@ -23,8 +23,7 @@ const executeNextJob = async (job) => {
         change_saled_sim
     } = job; // JOB from rabbitMQ
     try {
-        console.log("RUNNING with jobid", _id)
-        console.log(user.agency_id)
+        console.log("RUNNING with agency", user.agency_id)
         if (change_saled_sim) {
             if (sim_ids) {
                 await changeSaledSim(user, sim_ids, request_id, created_at, false);
@@ -40,7 +39,6 @@ const executeNextJob = async (job) => {
         }
         await doneJob(_id);
     } catch (error) {
-        console.log(error)
         await failedJob(_id, `DELETE_JOB-----ERROR:${error}-----JOB:${_id}-----USER:${user}-----ERORRSTACK:${error.stack}`);
     }
 }

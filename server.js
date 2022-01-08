@@ -6,6 +6,18 @@ const {
 } = require('./index')
 require('dotenv').config()
 
+var elasticsearch = require('@elastic/elasticsearch');
+var elastic = new elasticsearch.Client({
+    node: process.env.DB_ES,
+    requestTimeout: 1000 * 60 * 60,
+    keepAlive: false,
+    // log: 'trace'
+    log: [{
+        type: 'stdio',
+        levels: ['error'] // change these options
+    }]
+});
+console.log(elastic)
 const mongoose = require('mongoose');
 
 const connectionString = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_NAME}`;
@@ -53,16 +65,6 @@ amqp.connect('amqp://admin:Appsim2020@103.141.144.199:5672', function (error0, c
             const job = JSON.parse(msg.content.toString())
             await executeNextJob(job)
             channel.ack(msg);
-
-            // if (a) {
-            //     setTimeout(function () {
-            //         console.log(" [x] Done");
-            //         channel.ack(msg);
-            //     }, 2000);
-            // } else {
-            //     console.log(" [x] Fail")
-            //     channel.ack(msg)
-            // }
         }, {
             noAck: false
         });

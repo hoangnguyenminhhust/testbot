@@ -27,16 +27,15 @@ const removeSale = async (
     size = 0,
     from = 0
 ) => {
-    console.log("is_admin",is_admin)
 
     let query = [];
     let arrQuerySim = [];
     let arrLogSim = [];
     let arrJobLogsim = []
     if (!is_admin) {
+        
         data.map((sim) => arrQuerySim.push(sim.sim));
         let sim = await getElasticSims(arrQuerySim);
-        console.log(sim)
         const dataMap = _.groupBy(
             [
                 ...data.map((agency) => ({
@@ -121,7 +120,6 @@ const removeSale = async (
         })
 
         try {
-            console.log(query.length);
             if (query.length > 0) {
                 await elasticsearch.bulk({
                     body: query,
@@ -378,7 +376,6 @@ module.exports = {
         index_lt,
         created_at,
     ) => {
-        console.log("doDeleteSimjob")
         const collection_name = getCollectionName(user.agency_id);
         const model = mongoose.model(collection_name, simsBoardSchema);
         const existed = await model
@@ -398,7 +395,6 @@ module.exports = {
             .limit(index_lt - index_gte)
             .then((m) => m.map((n) => n.toJSON()));
         await removeSale(existed, created_at);
-        console.log(existed)
         await model.deleteMany({
             sim: {
                 $in: existed.map((x) => x["sim"])
